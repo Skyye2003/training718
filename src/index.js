@@ -72,3 +72,33 @@ io.on("connection", socket => {
 server.listen(port, () => {
   console.log(`Server is up on port ${port}!`);
 });
+
+const mysql = require("mysql2");
+
+// Connect to the MySQL database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'n3u3da!',
+  database: 'historical_currency_rate'
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.log("Failed to connect to the database: " + err.stack);
+    return;
+  }
+  console.log("Connected to the database with thread ID: " + connection.threadId);
+
+  // Query the currencyHistoricalRate table
+  const query = "SELECT * FROM currencyHistoricalRate";
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error("Error executing query: " + error.stack);
+      return;
+    }
+    console.log("Query results:", results);
+  });
+});
+
+
